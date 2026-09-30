@@ -1,14 +1,11 @@
-#import kagglehub
-# Download latest version
-#path = kagglehub.dataset_download("shambhurajejagadale/student-performance-prediction-dataset")
-
+import kagglehub
 import os
 import pandas as pd
 import numpy as np
 
 #print("Path to dataset files:", path)
 
-path = r"C:\Users\Hamzat\.cache\kagglehub\datasets\shambhurajejagadale\student-performance-prediction-dataset\versions\1"
+path = kagglehub.dataset_download("shambhurajejagadale/student-performance-prediction-dataset")
 
 data = pd.read_csv(os.path.join(path, "student_dataset_10000_rows.csv"))
 
@@ -54,6 +51,6 @@ def gradient_descent(X, y, w_init, b_init, alpha, iterations):
 
 n = X.shape[1]
 w_in = np.zeros(n)
-w,b = gradient_descent(X, y, w_in, 0, 1e-7, 10000)
+w,b = gradient_descent(X, y, w_in, 0, 1e-7, 1000)
 x = np.array([7,56,8,62])
 print(model(w, x, b))
