@@ -49,8 +49,17 @@ def gradient_descent(X, y, w_init, b_init, alpha, iterations):
         b = b - alpha*dj_db
     return w,b
 
+def zscore_normalisation(X):
+    mu = np.mean(X, axis=0)
+    sigma = np.std(X, axis=0)
+    X_norm = (X - mu)/sigma
+    return X_norm, mu, sigma
+
+X_norm, mu, sigma = zscore_normalisation(X)
 n = X.shape[1]
 w_in = np.zeros(n)
-w,b = gradient_descent(X, y, w_in, 0, 1e-7, 1000)
-x = np.array([7,56,8,62])
-print(model(w, x, b))
+w,b = gradient_descent(X_norm, y, w_in, 0, 1, 5)
+x_in = np.array([7,56,8,70])
+x_in_norm = (x_in-mu)/sigma
+print(model(w, x_in_norm, b))
+#print(calculate_cost(X_norm,y,w,b))
