@@ -9,8 +9,8 @@ This project extends my earlier univariate gradient descent implementation to mu
 ## Dataset
 
 - **Source:** [Student Performance Prediction Dataset](https://www.kaggle.com/datasets/shambhurajejagadale/student-performance-prediction-dataset) (Kaggle), downloaded automatically via `kagglehub`.
-- **Features used:** [list your actual feature columns here, e.g. Hours_Studied, Attendance, Previous_Scores]
-- **Target:** [your target column, e.g. Exam_Score]
+- **Features used:** [Hours Studied, Attendance, Hours Slept, Previous Scores]
+- **Target:** [Exam_Score]
 
 ## Method
 
