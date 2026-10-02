@@ -4,7 +4,7 @@ A multiple linear regression model, implemented from scratch using vectorized gr
 
 ## Overview
 
-This project extends an earlier univariate gradient descent implementation ([link to that repo]) to multiple features. The goal was to implement vectorized multiple linear regression by hand — the cost function, the gradient computation, and the update rule — using NumPy matrix operations, rather than relying on a library's built-in `.fit()` method.
+This project extends my earlier univariate gradient descent implementation to multiple features. The goal was to implement vectorized multiple linear regression by hand — the cost function, the gradient computation, and the update rule — using NumPy matrix operations, rather than relying on a library's built-in `.fit()` method.
 
 ## Dataset
 
@@ -30,6 +30,22 @@ where `w` is a vector of weights (one per feature) and `x` is a vector of featur
 
 No explicit loops over training examples or features — every step uses NumPy matrix/vector operations.
 
+### Feature scaling (z-score normalization)
+
+Before training, each feature is normalized using z-score normalization:
+
+```
+x_norm = (x - mean) / std
+```
+
+This rescales every feature to have a mean of 0 and a standard deviation of 1, so features on very different raw scales (e.g. hours studied vs. previous exam score out of 100) contribute to the gradient fairly, rather than one feature's larger raw values dominating. It also allows a much larger learning rate to be used, which sped up convergence dramatically compared to the unscaled univariate project.
+
+The mean and standard deviation used for scaling are computed from the training data only, and the same values are reused to scale any new input before making a prediction — the model was trained on scaled features, so new inputs must be transformed the same way to produce a meaningful prediction.
+
+### Learning curve
+
+Cost is recorded at every iteration during training and plotted against iteration number afterward, to visually confirm gradient descent is converging (cost decreasing and flattening out) rather than diverging or oscillating. See the plot in the Results section below.
+
 ## Files
 
 - `main.py` — loads data, runs gradient descent, prints/plots results
@@ -51,9 +67,9 @@ python main.py
 
 ## What I learned
 
-- I learned how effective vectorization is in speeding up gradient descent compared to my last univariate linear regression which took longer to converge even though the dataset was smaller and I used less features.
+- I learned how effective vectorization is in speeding up gradient descent compared to my last univariate linear regression, which took longer to converge even though the dataset was smaller and I used fewer features.
+- I learned how much feature scaling (z-score normalization) matters for gradient descent — before scaling, the learning rate had to be extremely small (`1e-7`) to avoid diverging; after scaling, a much larger learning rate converged in only a handful of iterations.
 
-## Next steps
+## Limitations
 
-- Try polynomial regression on one or more features to check for non-linear relationships
-- Compare results against scikit-learn's `LinearRegression()` to validate the from-scratch implementation
+- The model can predict exam scores above 100% (or below 0%) for inputs far from the training data's range. Linear regression has no built-in output bounds — it fits a straight line and extrapolates it indefinitely, with no concept that scores are naturally capped between 0 and 100. This is most likely to happen for feature combinations outside the range the model was trained on. A production version of this model would need to clip predictions to a valid range, or use a model better suited to bounded outputs.
